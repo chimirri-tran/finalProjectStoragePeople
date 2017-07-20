@@ -44,11 +44,65 @@ import introsde.document.ws.Person;
 @Path("/peopleStorage")
 public class PeopleClient {
 	
-	public PeopleClient(){}
+
+	private URL url;
+	private QName qname;
+	private People people;
+	private int idCreated;
+	private DocumentBuilderFactory domFactory;
+	private DocumentBuilder builder;
+	private Document doc;
+	private SOAPConnectionFactory soapConnectionFactory;
+	private SOAPConnection soapConnection;
+
+	SOAPMessage soapMessage = null;
+	SOAPBody soapBody = null;
+
+	final String ENVELOPE_NAMESPACE = "http://schemas.xmlsoap.org/soap/envelope/";
+	final String ENVELOPE_NAMESPACE_TAG = "ws";
+	final String ENCODING_NAMESPACE = "http://www.w3.org/2001/12/soap-encoding";
+
+	final String BODY_NAMESPACE = "http://ws.document.introsde/";
+	final String BODY_NAMESPACE_TAG = "m";
+
+	String mediaType = "text/xml";
+
+	Long first_personId;
+	int last_personId;
+	String measure_type;
+	Long measureId;
 	
+	public PeopleClient(){}
+
+	public PeopleClient(String endpointUrl) throws Exception {
+
+		System.out.println("Starting People Service...");
+		System.out.println("**STEP 1**");
+		System.out.println("WSDL url " + endpointUrl + "\n[kill the process to exit]");
+
+		// 1st argument service URI, refer to wsdl document above
+		url = new URL(endpointUrl);
+
+		// 2nd argument is service name, refer to wsdl document above
+		qname = new QName("http://ws.document.introsde/", "PeopleService");
+
+		Service service = Service.create(url, qname);
+
+		FileOutputStream fos = new FileOutputStream(new File("output.txt"), true);
+		service.setHandlerResolver(new JaxWsHandlerResolver(fos));
+		people = service.getPort(People.class);
+
+		// Create SOAP Connection
+		soapConnectionFactory = SOAPConnectionFactory.newInstance();
+		soapConnection = soapConnectionFactory.createConnection();
+	}
+
+
+
 	// ricevo dati da sopra per salvare utente se non esiste o per aggiornare se
 	// esiste
 	@GET
+
 	@Produces({ MediaType.TEXT_XML, MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public String receiveData(@DefaultValue("") @QueryParam("username") String username,
 			@DefaultValue("") @QueryParam("password") String password, 
@@ -58,11 +112,8 @@ public class PeopleClient {
 
 		PeopleClient c = new PeopleClient(urlserver);
 		
-		if (saveperson.equals("yes")){System.out.println("yyyyy\n");
-		if (c.request_1().size()==0){System.out.println("vuoto");}
-		
+		if (saveperson.equals("yes")){
 		for (int i = 0; i < c.request_1().size(); i++) {
-			System.out.println("INBOUNDD MESSAGE\n");
 			if (c.request_1().get(i).getUsername().equals(username)) {
 				SOAPMessage soapResponse3 = c.soapConnection
 						.call(c.request_3(c.request_1().get(i).getPersonId(), username, password), c.url);
@@ -109,128 +160,6 @@ public class PeopleClient {
 			
 		}
 		return null;
-	}
-
-
-	private URL url;
-	private QName qname;
-	private People people;
-	private int idCreated;
-	private DocumentBuilderFactory domFactory;
-	private DocumentBuilder builder;
-	private Document doc;
-	private SOAPConnectionFactory soapConnectionFactory;
-	private SOAPConnection soapConnection;
-
-	SOAPMessage soapMessage = null;
-	SOAPBody soapBody = null;
-
-	final String ENVELOPE_NAMESPACE = "http://schemas.xmlsoap.org/soap/envelope/";
-	final String ENVELOPE_NAMESPACE_TAG = "ws";
-	final String ENCODING_NAMESPACE = "http://www.w3.org/2001/12/soap-encoding";
-
-	final String BODY_NAMESPACE = "http://ws.document.introsde/";
-	final String BODY_NAMESPACE_TAG = "m";
-
-	String mediaType = "text/xml";
-
-	Long first_personId;
-	int last_personId;
-	String measure_type;
-	Long measureId;
-
-	public PeopleClient(String endpointUrl) throws Exception {
-		// My server local
-		// final String MY_LOCAL_SERVER = "http://127.0.1.1:6902";
-
-		// My server that should be deployed on Heroku
-		// String MY_HEROKU_SERVER = "https://agile-shelf-1769.herokuapp.com";
-		// String BASE_URL = "/ws/people";
-		// String endpointUrl = MY_HEROKU_SERVER + BASE_URL + "?wsdl";
-
-		System.out.println("Starting People Service...");
-		System.out.println("**STEP 1**");
-		System.out.println("WSDL url " + endpointUrl + "\n[kill the process to exit]");
-
-		// 1st argument service URI, refer to wsdl document above
-		url = new URL(endpointUrl);
-		System.out.println("url " + url);
-
-		// 2nd argument is service name, refer to wsdl document above
-		qname = new QName("ws.document.introsde", "PeopleService");
-		System.out.println("qname " + qname);
-
-		//Service service = Service.create(url, qname);
-		Service service = Service.create(new QName("ws.document.introsde.PeopleService"));
-		System.out.println("service " + service);
-
-		//FileOutputStream fos = new FileOutputStream(new File("output.txt"), true);
-		//System.out.println("fos " + fos);
-		//service.setHandlerResolver(new JaxWsHandlerResolver(fos));
-		//people = service.getPort(People.class);
-		//System.out.println("people " + people);
-
-		// Create SOAP Connection
-		soapConnectionFactory = SOAPConnectionFactory.newInstance();
-		soapConnection = soapConnectionFactory.createConnection();
-		MessageFactory myMsgFct = MessageFactory.newInstance();
-		SOAPMessage message = myMsgFct.createMessage();
-		System.out.println("message " + message);
-
-	}
-
-
-
-
-	public static void main(String[] args) throws Exception {
-		if (args.length < 1)
-			System.out.println("Error: insert server url");
-
-		else {
-
-			try {
-
-				PeopleClient c = new PeopleClient(args[0]);
-				System.out.println("**STEP 2*");
-				c.request_1();
-				c.getGoalByPersonId(4);
-				// c.request_2();
-
-				SOAPMessage soapResponse3 = c.soapConnection.call(c.request_3(2, "rr", "rr"), c.url);
-				System.out.println("INBOUND MESSAGE\n");
-				System.out.println(getSOAPMessageAsString(soapResponse3));
-
-				// SOAPMessage soapResponse4 =
-				// c.soapConnection.call(c.request_4("sofia", "chimirri"),
-				// c.url);
-				// System.out.println("INBOUND MESSAGE\n");
-				// System.out.println(getSOAPMessageAsString(soapResponse4));
-
-				// /**/
-				// domFactory = DocumentBuilderFactory.newInstance();
-				// domFactory.setNamespaceAware(true);
-				// builder = domFactory.newDocumentBuilder();
-				// doc = builder.parse(new InputSource(new
-				// StringReader(getSOAPMessageAsString(soapResponse4))));
-				// Element rootElement = doc.getDocumentElement();
-				//
-				// String found = "";
-				// for (int i = 0; i < rootElement.getChildNodes().getLength();
-				// i++) {
-				// System.out.println("found: " + rootElement.getTextContent());
-				// if
-				// (rootElement.getChildNodes().item(i).getNodeName().equals("idPerson"))
-				// {
-				// found = rootElement.getTextContent();
-				// }
-				// }
-				// /**/
-
-				// c.request_5();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
 	}
 
 	public List<Person> request_1() {
@@ -362,7 +291,7 @@ public class PeopleClient {
 		people.deletePerson(i);
 	}
 
-	public SOAPBody createSOAPRequest() throws Exception {
+	public void createSOAPRequest() throws Exception {
 		// Create message
 		MessageFactory messageFactory = MessageFactory.newInstance();
 		soapMessage = messageFactory.createMessage();
@@ -376,8 +305,6 @@ public class PeopleClient {
 		// SOAP Body
 		soapBody = envelope.getBody();
 		soapBody.addNamespaceDeclaration(BODY_NAMESPACE_TAG, BODY_NAMESPACE);
-		
-		return soapBody;
 	}
 
 	public static String getSOAPMessageAsString(SOAPMessage soapMessage) {
