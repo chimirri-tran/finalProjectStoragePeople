@@ -37,6 +37,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
+import introsde.document.goal.JaxWsHandlerResolver;
 import introsde.document.ws.People;
 import introsde.document.ws.Person;
 @Stateless
@@ -113,38 +114,40 @@ public class PeopleClient {
 		PeopleClient c = new PeopleClient(urlserver);
 		
 		if (saveperson.equals("yes")){
-		for (int i = 0; i < c.request_1().size(); i++) {
-			if (c.request_1().get(i).getUsername().equals(username)) {
-				SOAPMessage soapResponse3 = c.soapConnection
-						.call(c.request_3(c.request_1().get(i).getPersonId(), username, password), c.url);
-				System.out.println("INBOUND MESSAGE\n");
-				System.out.println(getSOAPMessageAsString(soapResponse3));
-				return "update user";
-			}
-
-		}
+		
 		if (username.equals("") || password.equals("")) {
-			return "-1";
+			return "non ho trovato username e password";
 		} else {
-			SOAPMessage soapResponse4 = c.soapConnection.call(c.request_4("sofia", "chimirri"), c.url);
-			System.out.println("INBOUND MESSAGE\n");
-			System.out.println(getSOAPMessageAsString(soapResponse4));
-			/**/
-			domFactory = DocumentBuilderFactory.newInstance();
-			domFactory.setNamespaceAware(true);
-			builder = domFactory.newDocumentBuilder();
-			doc = builder.parse(new InputSource(new StringReader(getSOAPMessageAsString(soapResponse4))));
-			Element rootElement = doc.getDocumentElement();
-
-			String found = "";
-			for (int i = 0; i < rootElement.getChildNodes().getLength(); i++) {
-				System.out.println("found: " + rootElement.getTextContent());
-				if (rootElement.getChildNodes().item(i).getNodeName().equals("idPerson")) {
-					found = rootElement.getTextContent();
+			String testo="";
+			for (int i = 0; i < c.request_1().size(); i++) {
+				if (c.request_1().get(i).getUsername().equals(username)) {
+					SOAPMessage soapResponse3 = c.soapConnection
+							.call(c.request_3(c.request_1().get(i).getPersonId(), username, password), c.url);
+					System.out.println("INBOUND MESSAGE\n");
+					System.out.println(getSOAPMessageAsString(soapResponse3));
+					testo= "aggiornato";
+					return "aggiornato";
 				}
+			} if (!testo.equals("aggiornato")){
+				SOAPMessage soapResponse4 = c.soapConnection.call(c.request_4("sofia", "chimirri"), c.url);
+				System.out.println("INBOUND MESSAGE\n");
+				System.out.println(getSOAPMessageAsString(soapResponse4));
+				/**/
+				domFactory = DocumentBuilderFactory.newInstance();
+				domFactory.setNamespaceAware(true);
+				builder = domFactory.newDocumentBuilder();
+				doc = builder.parse(new InputSource(new StringReader(getSOAPMessageAsString(soapResponse4))));
+				Element rootElement = doc.getDocumentElement();
+
+				String found = "";
+					for (int i1 = 0; i1 < rootElement.getChildNodes().getLength(); i1++) {
+					System.out.println("found: " + rootElement.getTextContent());
+					if (rootElement.getChildNodes().item(i1).getNodeName().equals("idPerson")) {
+						found = rootElement.getTextContent();
+					}
+				}
+				return rootElement.getTextContent();
 			}
-			return rootElement.getTextContent();
-			/**/
 		}}else{
 			for (int i = 0; i < c.request_1().size(); i++) {
 				if (c.request_1().get(i).getUsername().equals(username)) {
@@ -152,10 +155,7 @@ public class PeopleClient {
 					return Integer.toString(id);
 				} else {
 					return "-1";
-			
 				}
-
-
 			}
 			
 		}
