@@ -116,7 +116,8 @@ public class PeopleClient {
 		if (saveperson.equals("yes")){
 		
 		if (username.equals("") || password.equals("")) {
-			return "non ho trovato username e password";
+			System.out.println("non ho trovato username e password");
+			return "-1";
 		} else {
 			String testo="";
 			for (int i = 0; i < c.request_1().size(); i++) {
