@@ -37,6 +37,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
+import introsde.document.goal.JaxWsHandlerResolver;
 import introsde.document.ws.People;
 import introsde.document.ws.Person;
 @Stateless
@@ -48,6 +49,7 @@ public class PeopleClient {
 	private URL url;
 	private QName qname;
 	private People people;
+	String testo="";
 	private int idCreated;
 	private DocumentBuilderFactory domFactory;
 	private DocumentBuilder builder;
@@ -66,7 +68,7 @@ public class PeopleClient {
 	final String BODY_NAMESPACE_TAG = "m";
 
 	String mediaType = "text/xml";
-
+	int id;
 	Long first_personId;
 	int last_personId;
 	String measure_type;
@@ -113,53 +115,65 @@ public class PeopleClient {
 		PeopleClient c = new PeopleClient(urlserver);
 		
 		if (saveperson.equals("yes")){
-		for (int i = 0; i < c.request_1().size(); i++) {
-			if (c.request_1().get(i).getUsername().equals(username)) {
+		
+		if (username.equals("") || password.equals("")) {
+			return "non ho trovato username e password";
+		} else {
+			
+			for (int i = 0; i < c.request_1().size() && !(c.request_1().get(i).getUsername().equals(username)); i++) {
+				
+					id=c.request_1().get(i).getPersonId();
+					testo= "aggiornato";
+					//break;
+					
+					//return "aggiornato";
+				
+				System.out.println(testo+"è questo");
+			} if (!testo.equals("aggiornato")){
+				SOAPMessage soapResponse4 = c.soapConnection.call(c.request_4("sofia", "chimirri"), c.url);
+				System.out.println("INBOUND MESSAGE\n");
+				System.out.println(getSOAPMessageAsString(soapResponse4));
+				/**/
+				domFactory = DocumentBuilderFactory.newInstance();
+				domFactory.setNamespaceAware(true);
+				builder = domFactory.newDocumentBuilder();
+				doc = builder.parse(new InputSource(new StringReader(getSOAPMessageAsString(soapResponse4))));
+				Element rootElement = doc.getDocumentElement();
+
+				String found = "";
+					for (int i1 = 0; i1 < rootElement.getChildNodes().getLength(); i1++) {
+					System.out.println("found: " + rootElement.getTextContent());
+//					if (rootElement.getChildNodes().item(i1).getNodeName().equals("idPerson")) {
+//						found = rootElement.getTextContent();
+//					
+//						
+//					}
+					return rootElement.getTextContent();
+				}
+					
+			}else{
 				SOAPMessage soapResponse3 = c.soapConnection
-						.call(c.request_3(c.request_1().get(i).getPersonId(), username, password), c.url);
+						.call(c.request_3(id, username, password), c.url);
 				System.out.println("INBOUND MESSAGE\n");
 				System.out.println(getSOAPMessageAsString(soapResponse3));
-				return "update user";
+				System.out.println("id: "+id);
+				return Integer.toString(id);
 			}
-
-		}
-		if (username.equals("") || password.equals("")) {
-			return "-1";
-		} else {
-			SOAPMessage soapResponse4 = c.soapConnection.call(c.request_4("sofia", "chimirri"), c.url);
-			System.out.println("INBOUND MESSAGE\n");
-			System.out.println(getSOAPMessageAsString(soapResponse4));
-			/**/
-			domFactory = DocumentBuilderFactory.newInstance();
-			domFactory.setNamespaceAware(true);
-			builder = domFactory.newDocumentBuilder();
-			doc = builder.parse(new InputSource(new StringReader(getSOAPMessageAsString(soapResponse4))));
-			Element rootElement = doc.getDocumentElement();
-
-			String found = "";
-			for (int i = 0; i < rootElement.getChildNodes().getLength(); i++) {
-				System.out.println("found: " + rootElement.getTextContent());
-				if (rootElement.getChildNodes().item(i).getNodeName().equals("idPerson")) {
-					found = rootElement.getTextContent();
-				}
-			}
-			return rootElement.getTextContent();
-			/**/
 		}}else{
-			for (int i = 0; i < c.request_1().size(); i++) {
-				if (c.request_1().get(i).getUsername().equals(username)) {
-					int id= c.getPersonByUsername(username);
-					return Integer.toString(id);
-				} else {
-					return "-1";
 			
+			System.out.println("id della persona1: "+username);
+			int i = 0;
+			while( i < c.request_1().size() && !(c.request_1().get(i).getUsername().equals(username))) {
+				
+				id=c.request_1().get(i).getPersonId();
+					//int id2= c.getPersonByUsername(username);
+					
+					i++;
 				}
-
-
-			}
-			
+			System.out.println("id della persona: "+id+" e "+c.request_1().get(i).getUsername());
+			return Integer.toString(id);
 		}
-		return null;
+		return "-1";
 	}
 
 	public List<Person> request_1() {
@@ -177,9 +191,11 @@ public class PeopleClient {
 
 	public int getPersonByUsername(String username) {
 		System.out.println("getGoalByPersonId");
-		templateRequest(2, "POST", mediaType);
-
-		return people.login(username);
+		templateRequest(7, "POST", mediaType);
+		//people.login(username);
+		List<Person>p =people.readPersonList();
+		System.out.println("dim: "+ p.size());
+			return -1;
 	}
 
 	public SOAPMessage request_3(int id, String user, String pass) {
