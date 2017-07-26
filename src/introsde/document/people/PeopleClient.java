@@ -37,7 +37,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-import introsde.document.goal.JaxWsHandlerResolver;
 import introsde.document.ws.People;
 import introsde.document.ws.Person;
 @Stateless
@@ -90,9 +89,9 @@ public class PeopleClient {
 
 		Service service = Service.create(url, qname);
 
-		FileOutputStream fos = new FileOutputStream(new File("output.txt"), true);
-		service.setHandlerResolver(new JaxWsHandlerResolver(fos));
-		people = service.getPort(People.class);
+//		FileOutputStream fos = new FileOutputStream(new File("output.txt"), true);
+//		service.setHandlerResolver(new JaxWsHandlerResolver(fos));
+//		people = service.getPort(People.class);
 
 		// Create SOAP Connection
 		soapConnectionFactory = SOAPConnectionFactory.newInstance();
