@@ -125,7 +125,7 @@ public class PeopleClient {
 					
 					//return "aggiornato";
 				
-				System.out.println(testo+"è questo");
+				System.out.println(testo+"e questo");
 			} if (!testo.equals("aggiornato")){
 				SOAPMessage soapResponse4 = c.soapConnection.call(c.request_4("sofia", "chimirri"), c.url);
 				System.out.println("INBOUND MESSAGE\n");

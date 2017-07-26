@@ -34,7 +34,7 @@ public class DeletePersonResponse {
     protected int message;
 
     /**
-     * Recupera il valore della proprietà message.
+     * Recupera il valore della proprieta message.
      * 
      */
     public int getMessage() {
@@ -42,7 +42,7 @@ public class DeletePersonResponse {
     }
 
     /**
-     * Imposta il valore della proprietà message.
+     * Imposta il valore della proprieta message.
      * 
      */
     public void setMessage(int value) {

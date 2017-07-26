@@ -128,8 +128,8 @@
 		</target>
 
 		<target name="start" depends="install">
-	        <echo message="app start introsde.rest.storage.App in ${build.dir}" />
-	        <java classname="introsde.rest.storage.App" classpath="${build.dir}" fork="true">
+	        <echo message="app start introsde.document.App in ${build.dir}" />
+	        <java classname="introsde.document.App" classpath="${build.dir}" fork="true">
 	            <arg value="$JAVA_OPTS  -cp" />
 	            <classpath>
 	                <path location="build" />

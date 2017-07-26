@@ -34,7 +34,7 @@ public class DeletePerson {
     protected int personId;
 
     /**
-     * Recupera il valore della proprietà personId.
+     * Recupera il valore della proprieta personId.
      * 
      */
     public int getPersonId() {
@@ -42,7 +42,7 @@ public class DeletePerson {
     }
 
     /**
-     * Imposta il valore della proprietà personId.
+     * Imposta il valore della proprieta personId.
      * 
      */
     public void setPersonId(int value) {
