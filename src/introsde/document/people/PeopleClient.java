@@ -89,9 +89,7 @@ public class PeopleClient {
 
 		Service service = Service.create(url, qname);
 
-//		FileOutputStream fos = new FileOutputStream(new File("output.txt"), true);
-//		service.setHandlerResolver(new JaxWsHandlerResolver(fos));
-//		people = service.getPort(People.class);
+		
 
 		// Create SOAP Connection
 		soapConnectionFactory = SOAPConnectionFactory.newInstance();
