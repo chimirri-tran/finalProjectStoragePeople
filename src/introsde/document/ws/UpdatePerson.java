@@ -36,7 +36,7 @@ public class UpdatePerson {
     protected Person person;
 
     /**
-     * Recupera il valore della proprieta person.
+     * Recupera il valore della proprietà person.
      * 
      * @return
      *     possible object is
@@ -48,7 +48,7 @@ public class UpdatePerson {
     }
 
     /**
-     * Imposta il valore della proprieta person.
+     * Imposta il valore della proprietà person.
      * 
      * @param value
      *     allowed object is

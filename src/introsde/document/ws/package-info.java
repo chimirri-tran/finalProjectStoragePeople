@@ -1,2 +1,2 @@
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://ws.document.introsde.src/")
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://ws.document.introsde/")
 package introsde.document.ws;

@@ -34,7 +34,7 @@ public class Login {
     protected String username;
 
     /**
-     * Recupera il valore della proprieta username.
+     * Recupera il valore della proprietà username.
      * 
      * @return
      *     possible object is
@@ -46,7 +46,7 @@ public class Login {
     }
 
     /**
-     * Imposta il valore della proprieta username.
+     * Imposta il valore della proprietà username.
      * 
      * @param value
      *     allowed object is

@@ -27,6 +27,36 @@ public interface People {
 
     /**
      * 
+     * @param idPerson
+     * @return
+     *     returns introsde.document.ws.Person
+     */
+    @WebMethod
+    @WebResult(name = "person", targetNamespace = "http://ws.document.introsde/")
+    @RequestWrapper(localName = "readPerson", targetNamespace = "http://ws.document.introsde/", className = "introsde.document.ws.ReadPerson")
+    @ResponseWrapper(localName = "readPersonResponse", targetNamespace = "http://ws.document.introsde/", className = "introsde.document.ws.ReadPersonResponse")
+    @Action(input = "http://ws.document.introsde/People/readPersonRequest", output = "http://ws.document.introsde/People/readPersonResponse")
+    public Person readPerson(
+        @WebParam(name = "idPerson", targetNamespace = "")
+        int idPerson);
+
+    /**
+     * 
+     * @param person
+     * @return
+     *     returns int
+     */
+    @WebMethod
+    @WebResult(name = "personId", targetNamespace = "")
+    @RequestWrapper(localName = "createPerson", targetNamespace = "http://ws.document.introsde/", className = "introsde.document.ws.CreatePerson")
+    @ResponseWrapper(localName = "createPersonResponse", targetNamespace = "http://ws.document.introsde/", className = "introsde.document.ws.CreatePersonResponse")
+    @Action(input = "http://ws.document.introsde/People/createPersonRequest", output = "http://ws.document.introsde/People/createPersonResponse")
+    public int createPerson(
+        @WebParam(name = "person", targetNamespace = "http://ws.document.introsde/")
+        Person person);
+
+    /**
+     * 
      * @param personId
      * @return
      *     returns int
@@ -54,36 +84,6 @@ public interface People {
     public int updatePerson(
         @WebParam(name = "person", targetNamespace = "http://ws.document.introsde/")
         Person person);
-
-    /**
-     * 
-     * @param person
-     * @return
-     *     returns int
-     */
-    @WebMethod
-    @WebResult(name = "personId", targetNamespace = "")
-    @RequestWrapper(localName = "createPerson", targetNamespace = "http://ws.document.introsde/", className = "introsde.document.ws.CreatePerson")
-    @ResponseWrapper(localName = "createPersonResponse", targetNamespace = "http://ws.document.introsde/", className = "introsde.document.ws.CreatePersonResponse")
-    @Action(input = "http://ws.document.introsde/People/createPersonRequest", output = "http://ws.document.introsde/People/createPersonResponse")
-    public int createPerson(
-        @WebParam(name = "person", targetNamespace = "http://ws.document.introsde/")
-        Person person);
-
-    /**
-     * 
-     * @param idPerson
-     * @return
-     *     returns introsde.document.ws.Person
-     */
-    @WebMethod
-    @WebResult(name = "person", targetNamespace = "http://ws.document.introsde/")
-    @RequestWrapper(localName = "readPerson", targetNamespace = "http://ws.document.introsde/", className = "introsde.document.ws.ReadPerson")
-    @ResponseWrapper(localName = "readPersonResponse", targetNamespace = "http://ws.document.introsde/", className = "introsde.document.ws.ReadPersonResponse")
-    @Action(input = "http://ws.document.introsde/People/readPersonRequest", output = "http://ws.document.introsde/People/readPersonResponse")
-    public Person readPerson(
-        @WebParam(name = "idPerson", targetNamespace = "")
-        int idPerson);
 
     /**
      * 

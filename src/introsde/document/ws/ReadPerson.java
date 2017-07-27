@@ -34,7 +34,7 @@ public class ReadPerson {
     protected int idPerson;
 
     /**
-     * Recupera il valore della proprieta idPerson.
+     * Recupera il valore della proprietà idPerson.
      * 
      */
     public int getIdPerson() {
@@ -42,7 +42,7 @@ public class ReadPerson {
     }
 
     /**
-     * Imposta il valore della proprieta idPerson.
+     * Imposta il valore della proprietà idPerson.
      * 
      */
     public void setIdPerson(int value) {

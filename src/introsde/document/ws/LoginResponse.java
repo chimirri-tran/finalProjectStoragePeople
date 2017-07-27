@@ -34,7 +34,7 @@ public class LoginResponse {
     protected int message;
 
     /**
-     * Recupera il valore della proprieta message.
+     * Recupera il valore della proprietà message.
      * 
      */
     public int getMessage() {
@@ -42,7 +42,7 @@ public class LoginResponse {
     }
 
     /**
-     * Imposta il valore della proprieta message.
+     * Imposta il valore della proprietà message.
      * 
      */
     public void setMessage(int value) {

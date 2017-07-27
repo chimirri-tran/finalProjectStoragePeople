@@ -43,7 +43,7 @@ public class Person {
     protected String birthdate;
 
     /**
-     * Recupera il valore della proprieta personId.
+     * Recupera il valore della proprietà personId.
      * 
      */
     public int getPersonId() {
@@ -51,7 +51,7 @@ public class Person {
     }
 
     /**
-     * Imposta il valore della proprieta personId.
+     * Imposta il valore della proprietà personId.
      * 
      */
     public void setPersonId(int value) {
@@ -59,7 +59,7 @@ public class Person {
     }
 
     /**
-     * Recupera il valore della proprieta username.
+     * Recupera il valore della proprietà username.
      * 
      * @return
      *     possible object is
@@ -71,7 +71,7 @@ public class Person {
     }
 
     /**
-     * Imposta il valore della proprieta username.
+     * Imposta il valore della proprietà username.
      * 
      * @param value
      *     allowed object is
@@ -83,7 +83,7 @@ public class Person {
     }
 
     /**
-     * Recupera il valore della proprieta password.
+     * Recupera il valore della proprietà password.
      * 
      * @return
      *     possible object is
@@ -95,7 +95,7 @@ public class Person {
     }
 
     /**
-     * Imposta il valore della proprieta password.
+     * Imposta il valore della proprietà password.
      * 
      * @param value
      *     allowed object is
@@ -107,7 +107,7 @@ public class Person {
     }
 
     /**
-     * Recupera il valore della proprieta birthdate.
+     * Recupera il valore della proprietà birthdate.
      * 
      * @return
      *     possible object is
@@ -119,7 +119,7 @@ public class Person {
     }
 
     /**
-     * Imposta il valore della proprieta birthdate.
+     * Imposta il valore della proprietà birthdate.
      * 
      * @param value
      *     allowed object is

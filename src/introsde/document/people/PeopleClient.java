@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPConnection;
@@ -29,10 +30,13 @@ import javax.xml.soap.SOAPPart;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.Service;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -52,7 +56,7 @@ public class PeopleClient {
 	private int idCreated;
 	private DocumentBuilderFactory domFactory;
 	private DocumentBuilder builder;
-	private Document doc;
+	private static Document doc;
 	private SOAPConnectionFactory soapConnectionFactory;
 	private SOAPConnection soapConnection;
 
@@ -108,7 +112,7 @@ public class PeopleClient {
 			@DefaultValue("") @QueryParam("saveperson") String saveperson) throws Exception {
 		System.out.println("GET");
 		String urlserver = "http://localhost:6903/ws/people";
-
+		System.out.println("username"+username);
 		PeopleClient c = new PeopleClient(urlserver);
 		
 		if (saveperson.equals("yes")){
@@ -157,6 +161,7 @@ public class PeopleClient {
 				return Integer.toString(id);
 			}
 		}}else{
+			//Document d= XmlFile(username,password,id);
 			
 			System.out.println("id della persona1: "+username);
 			int i = 0;
@@ -359,6 +364,68 @@ public class PeopleClient {
 		System.out.println("Method #" + numberRequest + ": " + method + " " + "Accept: " + mediaType + " "
 				+ "Content-Type: " + mediaType);
 		System.out.println();
+	}
+	
+//	public static void main(String argv[]) {
+//		String username = "ff";
+//		String pass = "ff";
+//		int id = 2;
+//		XmlFile(username, pass, id);
+//	}
+	public static Document XmlFile (String username, String pass, int id)  {
+
+		try {
+
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+			// root elements
+			Document doc = docBuilder.newDocument();
+			Element rootElement = doc.createElement("people");
+			doc.appendChild(rootElement);
+
+			// staff elements
+			Element staff = doc.createElement("person");
+			rootElement.appendChild(staff);
+			// set attribute to staff element
+			Attr attr = doc.createAttribute("idPerson");
+			attr.setValue(String.valueOf(id));
+			staff.setAttributeNode(attr);
+
+			// shorten way
+			// staff.setAttribute("id", "1");
+
+			// firstname elements
+			Element user = doc.createElement("username");
+			user.appendChild(doc.createTextNode(username));
+			staff.appendChild(user);
+
+			// lastname elements
+			Element password = doc.createElement("password");
+			password.appendChild(doc.createTextNode(pass));
+			staff.appendChild(password);
+			// write the content into xml file
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			//StreamResult result = new StreamResult(new File("\\file.xml"));
+
+			// Output to console for testing
+			// StreamResult result = new StreamResult(System.out);
+
+			//transformer.transform(source, result);
+		
+
+			System.out.println("File saved!"+ source);
+
+		  } catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		  } catch (TransformerException tfe) {
+			tfe.printStackTrace();
+		  }
+		return doc;
+
+		
 	}
 
 }
